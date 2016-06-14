@@ -1,0 +1,14 @@
+[
+	{
+	  "modid": "Funnels",
+	  "name": "Funnels",
+	  "version": "$version",
+	  "mcversion": "$mcversion",
+	  "description": "Fluid funnels",
+	  "credits": "",
+	  "url": "https://github.com/shadowfacts/Funnels",
+	  "updateUrl": "",
+	  "authorList": [ "shadowfacts" ],
+	  "screenshots": []
+	}
+]

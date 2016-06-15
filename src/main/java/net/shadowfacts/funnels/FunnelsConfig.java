@@ -15,7 +15,7 @@ public class FunnelsConfig {
 	static Configuration config;
 
 	@Config.Prop
-	public static int size = 4000;
+	public static int size = 1000;
 
 	@Config.Prop
 	public static boolean pickupWorldFluids = true;

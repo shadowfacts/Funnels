@@ -85,8 +85,10 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 			TileEntityFunnel te = getTileEntity(world, pos);
 
 			if (FluidUtils.fillHandlerWithContainer(world, te.tank, player, hand)) {
+				te.save();
 				return true;
 			} else if (FluidUtils.fillContainerFromHandler(world, te.tank, player, hand, te.tank.getFluid())) {
+				te.save();
 				return true;
 			}
 		}

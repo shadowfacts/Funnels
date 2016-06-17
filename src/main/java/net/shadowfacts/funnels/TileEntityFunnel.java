@@ -6,14 +6,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.shadowfacts.shadowmc.ShadowMC;
+import net.shadowfacts.shadowmc.capability.CapHolder;
+import net.shadowfacts.shadowmc.fluid.FluidTank;
+import net.shadowfacts.shadowmc.nbt.AutoSerializeNBT;
 import net.shadowfacts.shadowmc.network.PacketUpdateTE;
 import net.shadowfacts.shadowmc.tileentity.BaseTileEntity;
 
@@ -22,11 +23,13 @@ import net.shadowfacts.shadowmc.tileentity.BaseTileEntity;
  */
 public class TileEntityFunnel extends BaseTileEntity implements ITickable {
 
+	@AutoSerializeNBT
+	@CapHolder(capabilities = IFluidHandler.class)
 	FluidTank tank = new FluidTank(FunnelsConfig.size);
 
 	private int tick;
 
-	private void save() {
+	void save() {
 		markDirty();
 		ShadowMC.network.sendToAllAround(new PacketUpdateTE(this), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 64));
 	}
@@ -105,21 +108,6 @@ public class TileEntityFunnel extends BaseTileEntity implements ITickable {
 		super.writeToNBT(tag);
 		tank.writeToNBT(tag);
 		return tag;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return (T)tank;
-		} else {
-			return super.getCapability(capability, facing);
-		}
 	}
 
 }

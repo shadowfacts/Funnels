@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
@@ -39,6 +40,7 @@ public class Funnels {
 		GameRegistry.addRecipe(new ShapedOreRecipe(funnel, "I I", "I I", " B ", 'I', "ingotIron", 'B', Items.BUCKET));
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void preInitClient() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFunnel.class, new TESRFunnel());
 		funnel.initItemModel();

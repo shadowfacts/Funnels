@@ -1,5 +1,6 @@
 package net.shadowfacts.funnels;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -35,9 +36,13 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 	protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D);
 
 	public BlockFunnel() {
-		super(Material.ROCK, "funnel");
+		super(Material.IRON, "funnel");
 
 		setCreativeTab(CreativeTabs.MISC);
+
+		setHardness(3.5f);
+		setResistance(8);
+		setSoundType(SoundType.METAL);
 
 		setDefaultState(getDefaultState()
 				.withProperty(FACING, EnumFacing.DOWN));

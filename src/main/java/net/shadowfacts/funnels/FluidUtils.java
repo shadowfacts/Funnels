@@ -17,62 +17,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
  */
 public class FluidUtils {
 
-	public static boolean fillHandlerWithContainer(World world, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
-		ItemStack container = player.getHeldItem(hand);
-		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
-
-		if (fluid != null) {
-			if (handler.fill(fluid, false) == fluid.amount || player.capabilities.isCreativeMode) {
-				ItemStack returnStack = FluidContainerRegistry.drainFluidContainer(container);
-				if (world.isRemote) {
-					return true;
-				}
-				if (!player.capabilities.isCreativeMode) {
-					if (PlayerUtils.disposePlayerItem(player.getHeldItem(hand), returnStack, player, true)) {
-						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP)player).sendContainerToPlayer(player.openContainer);
-					}
-				}
-				handler.fill(fluid, true);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player, EnumHand hand, FluidStack tankFluid) {
-		ItemStack container = player.getHeldItem(hand);
-
-		if (FluidContainerRegistry.isEmptyContainer(container)) {
-			ItemStack returnStack = FluidContainerRegistry.fillFluidContainer(tankFluid, container);
-			FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(returnStack);
-
-			if (fluid == null || returnStack == null) {
-				return false;
-			}
-			if (world.isRemote) {
-				return true;
-			}
-			if (!player.capabilities.isCreativeMode) {
-				if (container.stackSize == 1) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, returnStack);
-					container.stackSize--;
-					if (container.stackSize <= 0) {
-						container = null;
-					}
-				} else {
-					if (PlayerUtils.disposePlayerItem(player.getHeldItem(hand), returnStack, player, true)) {
-						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
-					}
-				}
-			}
-			handler.drain(fluid.amount, true);
-			return true;
-		}
-		return false;
-	}
-
 	public static boolean isFluidBlock(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof BlockLiquid) {

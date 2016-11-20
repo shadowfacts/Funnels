@@ -28,7 +28,7 @@ public class TESRFunnel extends TileEntitySpecialRenderer<TileEntityFunnel> {
 			renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 			Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			int color = fluid.getFluid().getColor(fluid);
-			int brightness = Minecraft.getMinecraft().theWorld.getCombinedLight(te.getPos(), fluid.getFluid().getLuminosity());
+			int brightness = Minecraft.getMinecraft().world.getCombinedLight(te.getPos(), fluid.getFluid().getLuminosity());
 
 			GlStateManager.pushMatrix();
 

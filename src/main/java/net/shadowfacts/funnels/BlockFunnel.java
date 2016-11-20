@@ -16,6 +16,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.shadowfacts.shadowmc.block.BlockTE;
 
 import javax.annotation.Nonnull;
@@ -78,21 +81,19 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		EnumFacing side = facing.getOpposite();
 		if (side == EnumFacing.UP) side = EnumFacing.DOWN;
 		return getDefaultState().withProperty(FACING, side);
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
 		if (!player.isSneaking()) {
 			TileEntityFunnel te = getTileEntity(world, pos);
-
-			if (FluidUtils.fillHandlerWithContainer(world, te.tank, player, hand)) {
-				te.save();
-				return true;
-			} else if (FluidUtils.fillContainerFromHandler(world, te.tank, player, hand, te.tank.getFluid())) {
+			ItemStack stack = player.getHeldItem(hand);
+			FluidActionResult result = FluidUtil.interactWithFluidHandler(stack, te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.NORTH), player);
+			if (result.isSuccess()) {
 				te.save();
 				return true;
 			}

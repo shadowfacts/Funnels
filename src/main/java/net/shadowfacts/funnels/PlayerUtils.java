@@ -13,12 +13,12 @@ public class PlayerUtils {
 		if (entityplayer == null || entityplayer.capabilities.isCreativeMode) {
 			return true;
 		}
-		if (allowReplace && stack.stackSize <= 1) {
-			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+		if (allowReplace && stack.getCount() <= 1) {
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, ItemStack.EMPTY);
 			entityplayer.inventory.addItemStackToInventory(dropStack);
 			return true;
 		} else if (allowDrop) {
-			stack.stackSize -= 1;
+			stack.shrink(1);
 			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
 				entityplayer.dropItem(dropStack, false, true);
 			}

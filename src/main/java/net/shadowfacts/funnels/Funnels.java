@@ -16,7 +16,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 @Mod(modid = Funnels.modId, name = Funnels.name, version = Funnels.version, dependencies = "required-after:shadowmc@[3.4.0,);", guiFactory = "net.shadowfacts.funnels.GUIFactory")
 public class Funnels {
 
-	public static final String modId = "Funnels";
+	public static final String modId = "funnels";
 	public static final String name = "Funnels";
 	public static final String version = "@VERSION@";
 

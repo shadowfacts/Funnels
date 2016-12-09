@@ -3,7 +3,7 @@
 	"variants": {
 		"inventory": {
 			"model": "hopper_down",
-			"transform": "forge:default-item"
+			"transform": "forge:default-block"
 		},
 		"facing": {
 			"down": {

@@ -1,6 +1,8 @@
 package net.shadowfacts.funnels;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -63,33 +65,32 @@ public class TileEntityFunnel extends BaseTileEntity implements ITickable {
 				}
 			}
 
-			world:
-			{
-				tick++;
-				if (tick % 40 == 0) {
+			tick++;
+			if (tick % 40 == 0) {
 //				pickup from world
-					if (FunnelsConfig.pickupWorldFluids && tank.getFluidAmount() <= tank.getCapacity() - Fluid.BUCKET_VOLUME) {
-						tick = 0;
-						if (FluidUtils.isFluidBlock(world, pos.up())) {
-							FluidStack toDrain = FluidUtils.drainFluidBlock(world, pos.up(), false);
-							if (toDrain.amount <= tank.getCapacity() - tank.getFluidAmount()) {
-								tank.fill(FluidUtils.drainFluidBlock(world, pos.up(), true), true);
-								save();
-								break world;
-							}
+				if (FunnelsConfig.pickupWorldFluids && tank.getFluidAmount() <= tank.getCapacity() - Fluid.BUCKET_VOLUME) {
+					tick = 0;
+					if (FluidUtils.isFluidBlock(world, pos.up())) {
+						FluidStack toDrain = FluidUtils.drainFluidBlock(world, pos.up(), false);
+						if (toDrain.amount <= tank.getCapacity() - tank.getFluidAmount()) {
+							tank.fill(FluidUtils.drainFluidBlock(world, pos.up(), true), true);
+							save();
+							return;
 						}
 					}
+				}
 //				place in world
-					if (FunnelsConfig.placeFluidsInWorld && tank.getFluidAmount() >= Fluid.BUCKET_VOLUME) {
-						FluidStack fluid = tank.getFluid();
-						if (fluid.getFluid().canBePlacedInWorld()) {
-							Block fluidBlock = fluid.getFluid().getBlock();
-							BlockPos newPos = pos.offset(world.getBlockState(pos).getValue(BlockFunnel.FACING));
-							if (fluidBlock.canPlaceBlockAt(world, newPos)) {
-								tank.drain(Fluid.BUCKET_VOLUME, true);
-								save();
-								world.setBlockState(newPos, fluidBlock.getDefaultState());
-							}
+				if (FunnelsConfig.placeFluidsInWorld && tank.getFluidAmount() >= Fluid.BUCKET_VOLUME) {
+					FluidStack fluid = tank.getFluid();
+					if (fluid.getFluid().canBePlacedInWorld()) {
+						Block fluidBlock = fluid.getFluid().getBlock();
+						if (fluidBlock instanceof BlockLiquid) fluidBlock = BlockLiquid.getFlowingBlock(fluidBlock.getMaterial(fluidBlock.getDefaultState()));
+
+						BlockPos newPos = pos.offset(world.getBlockState(pos).getValue(BlockFunnel.FACING));
+						if (fluidBlock.canPlaceBlockAt(world, newPos)) {
+							tank.drain(Fluid.BUCKET_VOLUME, true);
+							save();
+							world.setBlockState(newPos, fluidBlock.getDefaultState());
 						}
 					}
 				}

@@ -88,12 +88,13 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!player.isSneaking()) {
 			TileEntityFunnel te = getTileEntity(world, pos);
 			ItemStack stack = player.getHeldItem(hand);
 			FluidActionResult result = FluidUtil.interactWithFluidHandler(stack, te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.NORTH), player);
 			if (result.isSuccess()) {
+				player.setHeldItem(hand, result.getResult());
 				te.save();
 				return true;
 			}

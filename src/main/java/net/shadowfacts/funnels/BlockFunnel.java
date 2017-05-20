@@ -52,12 +52,14 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 	}
 
 	@Override
+	@Deprecated
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return FULL_BLOCK_AABB;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+	@Deprecated
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
@@ -76,6 +78,7 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 	}
 
 	@Override
+	@Deprecated
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
 	}
@@ -89,20 +92,12 @@ public class BlockFunnel extends BlockTE<TileEntityFunnel> {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!player.isSneaking()) {
-			TileEntityFunnel te = getTileEntity(world, pos);
-			ItemStack stack = player.getHeldItem(hand);
-			FluidActionResult result = FluidUtil.interactWithFluidHandler(stack, te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.NORTH), player);
-			if (result.isSuccess()) {
-				player.setHeldItem(hand, result.getResult());
-				te.save();
-				return true;
-			}
-		}
-		return false;
+//		use UP b/c fluid capability isn't exposed on other sides, but players should still be able to fill from all sides
+		return !player.isSneaking() && FluidUtil.interactWithFluidHandler(player, hand, world, pos, EnumFacing.UP);
 	}
 
 	@Override
+	@Deprecated
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}

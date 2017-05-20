@@ -84,7 +84,7 @@ public class TileEntityFunnel extends BaseTileEntity implements ITickable {
 					FluidStack fluid = tank.getFluid();
 					if (fluid.getFluid().canBePlacedInWorld()) {
 						Block fluidBlock = fluid.getFluid().getBlock();
-						if (fluidBlock instanceof BlockLiquid) fluidBlock = BlockLiquid.getFlowingBlock(fluidBlock.getMaterial(fluidBlock.getDefaultState()));
+						if (fluidBlock instanceof BlockLiquid) fluidBlock = BlockLiquid.getFlowingBlock(fluidBlock.getDefaultState().getMaterial());
 
 						BlockPos newPos = pos.offset(world.getBlockState(pos).getValue(BlockFunnel.FACING));
 						if (fluidBlock.canPlaceBlockAt(world, newPos)) {

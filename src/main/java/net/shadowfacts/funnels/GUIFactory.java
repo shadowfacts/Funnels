@@ -17,6 +17,17 @@ public class GUIFactory implements IModGuiFactory {
 	}
 
 	@Override
+	public boolean hasConfigGui() {
+		return true;
+	}
+
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parent) {
+		return new FunnelsConfigGUI(parent);
+	}
+
+	@Override
+	@Deprecated
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
 		return FunnelsConfigGUI.class;
 	}
@@ -27,6 +38,7 @@ public class GUIFactory implements IModGuiFactory {
 	}
 
 	@Override
+	@Deprecated
 	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
